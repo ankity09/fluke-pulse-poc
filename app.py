@@ -10,8 +10,24 @@ from model_serving_utils import (
 from collections import OrderedDict
 from messages import UserMessage, AssistantResponse, render_message
 
+# Page configuration
+st.set_page_config(
+    page_title="Fluke Pulse AI Assistant",
+    page_icon="🔧",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Load custom CSS
+def load_css():
+    with open('fluke_theme.css') as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+# Apply custom CSS
+load_css()
 
 SERVING_ENDPOINT = os.getenv('SERVING_ENDPOINT')
 assert SERVING_ENDPOINT, \
@@ -92,9 +108,25 @@ def reduce_chat_agent_chunks(chunks):
 if "history" not in st.session_state:
     st.session_state.history = []
 
-st.title("🧱 Chatbot App")
-st.write(f"A basic chatbot using your own serving endpoint.")
-st.write(f"Endpoint name: `{SERVING_ENDPOINT}`")
+# Fluke Logo and Header
+col1, col2 = st.columns([1, 4])
+with col1:
+    st.image("fluke_logo.svg", width=200)
+with col2:
+    st.markdown("""
+    <div class="fluke-branding">
+        <h1>Fluke Pulse AI Assistant</h1>
+        <p>Your intelligent companion for technical support and troubleshooting</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Status indicator
+st.markdown(f"""
+<div style="margin-bottom: 1rem;">
+    <strong>Endpoint:</strong> <code>{SERVING_ENDPOINT}</code>
+    <span class="status-indicator status-online">● Online</span>
+</div>
+""", unsafe_allow_html=True)
 
 
 
@@ -316,7 +348,7 @@ def query_responses_endpoint_and_render(input_messages):
 
 
 # --- Chat input (must run BEFORE rendering messages) ---
-prompt = st.chat_input("Ask a question")
+prompt = st.chat_input("Ask about Fluke products, technical support, or troubleshooting...")
 if prompt:
     # Get the task type for this endpoint
     task_type = _get_endpoint_task_type(SERVING_ENDPOINT)

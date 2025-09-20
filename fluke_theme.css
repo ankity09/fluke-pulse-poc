@@ -1,0 +1,231 @@
+/* Fluke Theme CSS for Streamlit App */
+
+/* Import Google Fonts for better typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Main theme variables */
+:root {
+    --fluke-yellow: #FFD700;
+    --fluke-yellow-dark: #FFC107;
+    --fluke-black: #000000;
+    --fluke-gray: #333333;
+    --fluke-light-gray: #F5F5F5;
+    --fluke-white: #FFFFFF;
+    --fluke-blue: #0066CC;
+    --fluke-red: #DC3545;
+}
+
+/* Override Streamlit's default styles */
+.stApp {
+    background-color: var(--fluke-white);
+    font-family: 'Inter', sans-serif;
+}
+
+/* Header styling */
+.stApp > header {
+    background-color: var(--fluke-yellow) !important;
+    border-bottom: 3px solid var(--fluke-black);
+}
+
+/* Main container */
+.main .block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    max-width: 1200px;
+}
+
+/* Logo container */
+.logo-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1rem 0;
+    border-bottom: 2px solid var(--fluke-light-gray);
+}
+
+.logo-container img {
+    height: 60px;
+    margin-right: 1rem;
+}
+
+.logo-text {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--fluke-black);
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.logo-subtitle {
+    font-size: 1rem;
+    color: var(--fluke-gray);
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Title styling */
+h1 {
+    color: var(--fluke-black) !important;
+    font-weight: 700 !important;
+    font-size: 2.5rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Subtitle styling */
+.stMarkdown p {
+    color: var(--fluke-gray) !important;
+    font-size: 1.1rem !important;
+    line-height: 1.6 !important;
+}
+
+/* Chat input styling */
+.stChatInput {
+    background-color: var(--fluke-white) !important;
+    border: 2px solid var(--fluke-yellow) !important;
+    border-radius: 8px !important;
+}
+
+.stChatInput input {
+    background-color: var(--fluke-white) !important;
+    color: var(--fluke-black) !important;
+    font-size: 1rem !important;
+    padding: 0.75rem 1rem !important;
+}
+
+.stChatInput input:focus {
+    border-color: var(--fluke-blue) !important;
+    box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2) !important;
+}
+
+/* Chat message styling */
+.stChatMessage {
+    background-color: var(--fluke-white) !important;
+    border: 1px solid var(--fluke-light-gray) !important;
+    border-radius: 8px !important;
+    margin: 0.5rem 0 !important;
+    padding: 1rem !important;
+}
+
+.stChatMessage[data-testid="user-message"] {
+    background-color: var(--fluke-yellow) !important;
+    border-color: var(--fluke-yellow-dark) !important;
+}
+
+.stChatMessage[data-testid="assistant-message"] {
+    background-color: var(--fluke-white) !important;
+    border-left: 4px solid var(--fluke-blue) !important;
+}
+
+/* Button styling */
+.stButton > button {
+    background-color: var(--fluke-blue) !important;
+    color: var(--fluke-white) !important;
+    border: none !important;
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+    padding: 0.5rem 1rem !important;
+    transition: all 0.2s ease !important;
+}
+
+.stButton > button:hover {
+    background-color: #0052A3 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(0, 102, 204, 0.3) !important;
+}
+
+/* Sidebar styling */
+.stSidebar {
+    background-color: var(--fluke-light-gray) !important;
+    border-right: 2px solid var(--fluke-yellow) !important;
+}
+
+.stSidebar .stMarkdown {
+    color: var(--fluke-gray) !important;
+}
+
+/* Code block styling */
+.stCodeBlock {
+    background-color: #f8f9fa !important;
+    border: 1px solid var(--fluke-light-gray) !important;
+    border-radius: 6px !important;
+}
+
+/* Markdown styling */
+.stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
+    color: var(--fluke-black) !important;
+    font-weight: 600 !important;
+}
+
+.stMarkdown a {
+    color: var(--fluke-blue) !important;
+    text-decoration: none !important;
+}
+
+.stMarkdown a:hover {
+    text-decoration: underline !important;
+}
+
+/* Custom Fluke branding */
+.fluke-branding {
+    background: linear-gradient(135deg, var(--fluke-yellow) 0%, var(--fluke-yellow-dark) 100%);
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.fluke-branding h1 {
+    color: var(--fluke-black) !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.fluke-branding p {
+    color: var(--fluke-gray) !important;
+    font-size: 1.1rem !important;
+    margin: 0 !important;
+}
+
+/* Status indicators */
+.status-indicator {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-left: 0.5rem;
+}
+
+.status-online {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-offline {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .logo-container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .logo-container img {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .logo-text {
+        font-size: 2rem;
+    }
+    
+    .main .block-container {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+}
