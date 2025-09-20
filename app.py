@@ -111,12 +111,12 @@ if "history" not in st.session_state:
 # Fluke Logo and Header
 col1, col2 = st.columns([1, 4])
 with col1:
-    st.image("fluke_logo.svg", width=200)
+    st.image("Fluke_Corporation_logo.svg.png", width=200)
 with col2:
     st.markdown("""
     <div class="fluke-branding">
-        <h1>Fluke Pulse AI Assistant</h1>
-        <p>Your intelligent companion for technical support and troubleshooting</p>
+        <h1 style="font-size: 1.75rem;">Fluke Pulse AI Assistant</h1>
+        <p style="font-size: 0.77rem;">Your intelligent companion for technical support and troubleshooting</p>
     </div>
     """, unsafe_allow_html=True)
 

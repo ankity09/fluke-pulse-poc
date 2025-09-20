@@ -178,11 +178,12 @@ h1 {
 .fluke-branding h1 {
     color: var(--fluke-black) !important;
     margin-bottom: 0.5rem !important;
+    font-size: 1.75rem !important;
 }
 
 .fluke-branding p {
     color: var(--fluke-gray) !important;
-    font-size: 1.1rem !important;
+    font-size: 0.77rem !important;
     margin: 0 !important;
 }
 
