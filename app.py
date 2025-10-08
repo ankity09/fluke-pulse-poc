@@ -190,37 +190,6 @@ def reduce_chat_agent_chunks(chunks):
     return result_msg
 
 
-
-# --- Init state ---
-if "history" not in st.session_state:
-    st.session_state.history = []
-
-# Customer Logo and Header
-col1, col2 = st.columns([1, 4])
-with col1:
-    st.image(current_config["logo_path"], width=200)
-with col2:
-    st.markdown(f"""
-    <div class="fluke-branding">
-        <h1 style="font-size: 1.75rem;">{current_config["title"]}</h1>
-        <p style="font-size: 0.77rem;">{current_config["subtitle"]}</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-# Status indicator
-st.markdown(f"""
-<div style="margin-bottom: 1rem;">
-    <strong>Endpoint:</strong> <code>{SERVING_ENDPOINT}</code>
-    <span class="status-indicator status-online">● Online</span>
-</div>
-""", unsafe_allow_html=True)
-
-
-
-# --- Render chat history ---
-for i, element in enumerate(st.session_state.history):
-    element.render(i)
-
 def query_endpoint_and_render(task_type, input_messages):
     """Handle streaming response based on task type."""
     if task_type == "agent/v1/responses":
@@ -432,24 +401,75 @@ def query_responses_endpoint_and_render(input_messages):
             return AssistantResponse(messages=messages, request_id=request_id)
 
 
+# --- Init state ---
+if "history" not in st.session_state:
+    st.session_state.history = []
 
+# Customer Logo and Header
+col1, col2 = st.columns([1, 4])
+with col1:
+    st.image(current_config["logo_path"], width=200)
+with col2:
+    st.markdown(f"""
+    <div class="fluke-branding">
+        <h1 style="font-size: 1.75rem;">{current_config["title"]}</h1>
+        <p style="font-size: 0.77rem;">{current_config["subtitle"]}</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-# --- Chat input (must run BEFORE rendering messages) ---
-prompt = st.chat_input(current_config["chat_input_placeholder"])
-if prompt:
-    # Get the task type for this endpoint
-    task_type = _get_endpoint_task_type(SERVING_ENDPOINT)
-    
-    # Add user message to chat history
-    user_msg = UserMessage(content=prompt)
-    st.session_state.history.append(user_msg)
-    user_msg.render(len(st.session_state.history) - 1)
+# Status indicator
+st.markdown(f"""
+<div style="margin-bottom: 1rem;">
+    <strong>Endpoint:</strong> <code>{SERVING_ENDPOINT}</code>
+    <span class="status-indicator status-online">● Online</span>
+</div>
+""", unsafe_allow_html=True)
 
-    # Convert history to standard chat message format for the query methods
-    input_messages = [msg for elem in st.session_state.history for msg in elem.to_input_messages()]
+# Create tabs
+tab1, tab2 = st.tabs(["📊 Dashboard", "💬 AI Assistant"])
+
+# Tab 1: Databricks Dashboard
+with tab1:
+    st.markdown("### Databricks AI BI Dashboard")
+    st.markdown("---")
     
-    # Handle the response using the appropriate handler
-    assistant_response = query_endpoint_and_render(task_type, input_messages)
+    # Embed the Databricks dashboard
+    dashboard_html = """
+    <iframe
+      src="https://e2-demo-west.cloud.databricks.com/embed/dashboardsv3/01f0696d102b145daeaec62e58c49c22?o=2556758628403379"
+      width="100%"
+      height="800"
+      frameborder="0"
+      style="border: 1px solid #ddd; border-radius: 8px;">
+    </iframe>
+    """
+    st.markdown(dashboard_html, unsafe_allow_html=True)
+
+# Tab 2: AI Chatbot
+with tab2:
+    st.markdown("### Chat with the AI Assistant")
+    st.markdown("---")
     
-    # Add assistant response to history
-    st.session_state.history.append(assistant_response)
+    # --- Render chat history ---
+    for i, element in enumerate(st.session_state.history):
+        element.render(i)
+    
+    # --- Chat input ---
+    prompt = st.chat_input(current_config["chat_input_placeholder"])
+    if prompt:
+        # Get the task type for this endpoint
+        task_type = _get_endpoint_task_type(SERVING_ENDPOINT)
+        
+        # Add user message to chat history
+        user_msg = UserMessage(content=prompt)
+        st.session_state.history.append(user_msg)
+        user_msg.render(len(st.session_state.history) - 1)
+
+        # Convert history to standard chat message format for the query methods
+        input_messages = [msg for elem in st.session_state.history for msg in elem.to_input_messages()]
+        
+        # Handle the response using the appropriate handler
+        assistant_response = query_endpoint_and_render(task_type, input_messages)
+        
+        # Add assistant response to history
+        st.session_state.history.append(assistant_response)
