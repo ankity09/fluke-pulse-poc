@@ -450,8 +450,11 @@ with tab2:
     st.markdown("### Chat with the AI Assistant")
     st.markdown("---")
     
+    # --- Render chat history FIRST (appears above input) ---
+    for i, element in enumerate(st.session_state.history):
+        element.render(i)
     
-    # --- Chat input (only in AI Assistant tab) ---
+    # --- Chat input at bottom (only in AI Assistant tab) ---
     prompt = st.chat_input(current_config["chat_input_placeholder"])
     if prompt:
         # Get the task type for this endpoint
@@ -460,7 +463,6 @@ with tab2:
         # Add user message to chat history
         user_msg = UserMessage(content=prompt)
         st.session_state.history.append(user_msg)
-        user_msg.render(len(st.session_state.history) - 1)
 
         # Convert history to standard chat message format for the query methods
         input_messages = [msg for elem in st.session_state.history for msg in elem.to_input_messages()]
@@ -470,7 +472,6 @@ with tab2:
         
         # Add assistant response to history
         st.session_state.history.append(assistant_response)
-    
-        # --- Render chat history ---
-    for i, element in enumerate(st.session_state.history):
-        element.render(i)
+        
+        # Rerun to display new messages
+        st.rerun()
