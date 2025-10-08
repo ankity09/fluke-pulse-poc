@@ -12,8 +12,8 @@ from messages import UserMessage, AssistantResponse, render_message
 
 # Page configuration
 st.set_page_config(
-    page_title="Fluke Pulse AI Assistant",
-    page_icon="🔧",
+    page_title="Pulse AI Assistant",
+    page_icon="🤖",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -21,13 +21,100 @@ st.set_page_config(
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Load custom CSS
-def load_css():
-    with open('fluke_theme.css') as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+# Customer configurations
+CUSTOMER_CONFIGS = {
+    "Fluke": {
+        "logo_path": "customer_logos/Fluke_Corporation_logo.svg.png",
+        "title": "Fluke Pulse AI Assistant",
+        "subtitle": "Your intelligent companion for technical support and troubleshooting",
+        "primary_color": "#FFD700",      # Yellow
+        "primary_dark": "#FFC107",
+        "secondary_color": "#0066CC",    # Blue
+        "accent_color": "#000000",       # Black
+        "chat_input_placeholder": "Ask about Fluke products, technical support, or troubleshooting..."
+    },
+    "Fortive": {
+        "logo_path": "customer_logos/fortive_logo.jpeg",
+        "title": "Fortive AI Assistant",
+        "subtitle": "Intelligent solutions for industrial technology and professional instrumentation",
+        "primary_color": "#00A3E0",      # Fortive Blue
+        "primary_dark": "#0082B3",
+        "secondary_color": "#003E51",    # Dark Blue
+        "accent_color": "#002F3D",       # Darker Blue
+        "chat_input_placeholder": "Ask about Fortive solutions, products, or services..."
+    },
+    "Informatica": {
+        "logo_path": "customer_logos/informatica-logo.png",
+        "title": "Informatica AI Assistant",
+        "subtitle": "Your intelligent data management and integration companion",
+        "primary_color": "#FF6B35",      # Informatica Orange
+        "primary_dark": "#E85A2B",
+        "secondary_color": "#2C3E50",    # Dark Gray-Blue
+        "accent_color": "#1A252F",       # Very Dark Blue
+        "chat_input_placeholder": "Ask about data integration, cloud solutions, or data governance..."
+    },
+    "Magic Eden": {
+        "logo_path": "customer_logos/magic-eden.jpeg",
+        "title": "Magic Eden AI Assistant",
+        "subtitle": "Your NFT marketplace intelligent companion",
+        "primary_color": "#E42575",      # Magic Eden Pink
+        "primary_dark": "#C41E63",
+        "secondary_color": "#7B61FF",    # Purple
+        "accent_color": "#1F1F1F",       # Dark Gray
+        "chat_input_placeholder": "Ask about NFTs, marketplace features, or trading..."
+    }
+}
 
-# Apply custom CSS
-load_css()
+# Load custom CSS with dynamic theming
+def load_css(customer_config):
+    with open('fluke_theme.css') as f:
+        base_css = f.read()
+    
+    # Override CSS variables based on customer
+    custom_css = f"""
+    <style>
+    {base_css}
+    
+    /* Customer-specific overrides */
+    :root {{
+        --fluke-yellow: {customer_config['primary_color']};
+        --fluke-yellow-dark: {customer_config['primary_dark']};
+        --fluke-blue: {customer_config['secondary_color']};
+        --fluke-black: {customer_config['accent_color']};
+    }}
+    </style>
+    """
+    st.markdown(custom_css, unsafe_allow_html=True)
+
+# Initialize session state for customer selection
+if "selected_customer" not in st.session_state:
+    st.session_state.selected_customer = "Fluke"
+
+# Sidebar - Customer Selector
+with st.sidebar:
+    st.markdown("### 🏢 Customer Selection")
+    selected_customer = st.selectbox(
+        "Select Customer",
+        options=list(CUSTOMER_CONFIGS.keys()),
+        index=list(CUSTOMER_CONFIGS.keys()).index(st.session_state.selected_customer),
+        key="customer_selector"
+    )
+    
+    # Update session state if customer changed
+    if selected_customer != st.session_state.selected_customer:
+        st.session_state.selected_customer = selected_customer
+        st.rerun()
+    
+    st.markdown("---")
+    st.markdown("### ℹ️ About")
+    st.markdown(f"Currently configured for **{selected_customer}**")
+    st.markdown("Switch customers using the selector above to see different branding and themes.")
+
+# Get current customer config
+current_config = CUSTOMER_CONFIGS[st.session_state.selected_customer]
+
+# Apply custom CSS with customer theme
+load_css(current_config)
 
 SERVING_ENDPOINT = os.getenv('SERVING_ENDPOINT')
 assert SERVING_ENDPOINT, \
@@ -108,15 +195,15 @@ def reduce_chat_agent_chunks(chunks):
 if "history" not in st.session_state:
     st.session_state.history = []
 
-# Fluke Logo and Header
+# Customer Logo and Header
 col1, col2 = st.columns([1, 4])
 with col1:
-    st.image("Fluke_Corporation_logo.svg.png", width=200)
+    st.image(current_config["logo_path"], width=200)
 with col2:
-    st.markdown("""
+    st.markdown(f"""
     <div class="fluke-branding">
-        <h1 style="font-size: 1.75rem;">Fluke Pulse AI Assistant</h1>
-        <p style="font-size: 0.77rem;">Your intelligent companion for technical support and troubleshooting</p>
+        <h1 style="font-size: 1.75rem;">{current_config["title"]}</h1>
+        <p style="font-size: 0.77rem;">{current_config["subtitle"]}</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -348,7 +435,7 @@ def query_responses_endpoint_and_render(input_messages):
 
 
 # --- Chat input (must run BEFORE rendering messages) ---
-prompt = st.chat_input("Ask about Fluke products, technical support, or troubleshooting...")
+prompt = st.chat_input(current_config["chat_input_placeholder"])
 if prompt:
     # Get the task type for this endpoint
     task_type = _get_endpoint_task_type(SERVING_ENDPOINT)
