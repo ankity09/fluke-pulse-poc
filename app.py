@@ -450,9 +450,6 @@ with tab2:
     st.markdown("### Chat with the AI Assistant")
     st.markdown("---")
     
-    # --- Render chat history ---
-    for i, element in enumerate(st.session_state.history):
-        element.render(i)
     
     # --- Chat input (only in AI Assistant tab) ---
     prompt = st.chat_input(current_config["chat_input_placeholder"])
@@ -473,3 +470,7 @@ with tab2:
         
         # Add assistant response to history
         st.session_state.history.append(assistant_response)
+    
+        # --- Render chat history ---
+    for i, element in enumerate(st.session_state.history):
+        element.render(i)
