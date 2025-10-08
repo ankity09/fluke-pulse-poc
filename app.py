@@ -453,23 +453,23 @@ with tab2:
     # --- Render chat history ---
     for i, element in enumerate(st.session_state.history):
         element.render(i)
-    
-    # --- Chat input ---
-    prompt = st.chat_input(current_config["chat_input_placeholder"])
-    if prompt:
-        # Get the task type for this endpoint
-        task_type = _get_endpoint_task_type(SERVING_ENDPOINT)
-        
-        # Add user message to chat history
-        user_msg = UserMessage(content=prompt)
-        st.session_state.history.append(user_msg)
-        user_msg.render(len(st.session_state.history) - 1)
 
-        # Convert history to standard chat message format for the query methods
-        input_messages = [msg for elem in st.session_state.history for msg in elem.to_input_messages()]
-        
-        # Handle the response using the appropriate handler
-        assistant_response = query_endpoint_and_render(task_type, input_messages)
-        
-        # Add assistant response to history
-        st.session_state.history.append(assistant_response)
+# --- Chat input (outside tab to be sticky at bottom) ---
+prompt = st.chat_input(current_config["chat_input_placeholder"])
+if prompt:
+    # Get the task type for this endpoint
+    task_type = _get_endpoint_task_type(SERVING_ENDPOINT)
+    
+    # Add user message to chat history
+    user_msg = UserMessage(content=prompt)
+    st.session_state.history.append(user_msg)
+    user_msg.render(len(st.session_state.history) - 1)
+
+    # Convert history to standard chat message format for the query methods
+    input_messages = [msg for elem in st.session_state.history for msg in elem.to_input_messages()]
+    
+    # Handle the response using the appropriate handler
+    assistant_response = query_endpoint_and_render(task_type, input_messages)
+    
+    # Add assistant response to history
+    st.session_state.history.append(assistant_response)
