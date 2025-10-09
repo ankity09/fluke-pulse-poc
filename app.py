@@ -405,26 +405,6 @@ def query_responses_endpoint_and_render(input_messages):
 if "history" not in st.session_state:
     st.session_state.history = []
 
-# Customer Logo and Header
-col1, col2 = st.columns([1, 4])
-with col1:
-    st.image(current_config["logo_path"], width=200)
-with col2:
-    st.markdown(f"""
-    <div class="fluke-branding">
-        <h1 style="font-size: 1.75rem;">{current_config["title"]}</h1>
-        <p style="font-size: 0.77rem;">{current_config["subtitle"]}</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-# Status indicator
-st.markdown(f"""
-<div style="margin-bottom: 1rem;">
-    <strong>Endpoint:</strong> <code>{SERVING_ENDPOINT}</code>
-    <span class="status-indicator status-online">● Online</span>
-</div>
-""", unsafe_allow_html=True)
-
 # Create tabs
 tab1, tab2 = st.tabs(["📊 Dashboard", "💬 AI Assistant"])
 
