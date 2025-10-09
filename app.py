@@ -405,6 +405,9 @@ def query_responses_endpoint_and_render(input_messages):
 if "history" not in st.session_state:
     st.session_state.history = []
 
+# Display logo only
+st.image(current_config["logo_path"], width=200)
+
 # Create tabs
 tab1, tab2 = st.tabs(["📊 Dashboard", "💬 AI Assistant"])
 
